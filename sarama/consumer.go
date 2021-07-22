@@ -42,7 +42,7 @@ ConsumerLoop:
 	for {
 		select {
 		case msg := <-partitionConsumer.Messages():
-			log.Printf("Consumed message with key = %s, value = \"%s\", offset = %d\n",
+			log.Printf("sarama consumed message with key = %s, value = \"%s\", offset = %d\n",
 				string(msg.Key), string(msg.Value), msg.Offset)
 			consumed++
 		case <-signals:

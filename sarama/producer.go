@@ -9,6 +9,12 @@ import (
 	"time"
 )
 
+//this produce function creates a sync producer and produce messages in every 2 seconds.
+//if you need a producer function to produce data only when you calling it, you need to init and save
+//producer reference in one time call function and reuse it to produce messages. write a separate producer function to
+//produce message using above producer reference.
+//for that you can use code snippet inside "case <-ticker.C"
+
 func produce() {
 	conf := sarama.NewConfig()
 	conf.Version = sarama.V2_8_0_0
@@ -40,7 +46,7 @@ producerLoop:
 			msg := &sarama.ProducerMessage{
 				Topic:     "my_topic",
 				Key:       sarama.StringEncoder(strconv.Itoa(produced)),
-				Value:     sarama.StringEncoder("message number " + strconv.Itoa(produced)),
+				Value:     sarama.StringEncoder("sarama producer message number " + strconv.Itoa(produced)),
 				Timestamp: time.Now(),
 				Headers: []sarama.RecordHeader{
 					{
@@ -53,7 +59,7 @@ producerLoop:
 			if err != nil {
 				log.Printf("FAILED to send message: %s\n", err)
 			} else {
-				log.Printf("> message sent to partition %d at offset %d\n", partition, offset)
+				log.Printf("> sarama message sent to partition %d at offset %d\n", partition, offset)
 			}
 			produced++
 
